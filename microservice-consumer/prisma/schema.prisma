@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model DiscordEvent {
+  id             Int       @id @default(autoincrement())
+  event_type     String
+  user_id        String
+  username       String
+  server_id      String?
+  channel_id     String?
+  message_id     String?
+  status_old     String?
+  status_new     String?
+  activities     String[]
+  roles_added    String[]
+  roles_removed  String[]
+  action         String?
+  mute           Boolean?
+  deaf           Boolean?
+  emoji          String?
+  message_length Int?
+  attachments    Int?
+  mentions       Int?
+  created_at     DateTime  @default(now())
+}

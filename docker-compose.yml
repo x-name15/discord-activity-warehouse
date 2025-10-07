@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  discord-bot:
+    build: ./discord-bot
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  microservice-consumer:
+    build: ./microservice-consumer
+    env_file:
+      - ./.env
+    volumes:
+      - ./.env:/app/.env 
+    depends_on:
+      - rabbitmq
+      - postgres
+    command: ["sh", "./bin/consumer_entrypoint.sh"]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
