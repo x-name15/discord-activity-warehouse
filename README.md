@@ -45,13 +45,3 @@ Este proyecto captura **eventos de actividad de usuarios en un servidor de Disco
 
 
 
-
-🧾 En el Data Warehouse (PostgreSQL)
-
-Luego, cuando el microservicio consuma los mensajes, podríamos tener tablas normalizadas como:
-
-users
-Campo	Tipo	Descripción
-id	bigint	ID del usuario (de Discord)
-username	text	Nombre visible
-joined_at	timestamp	Fecha de ingreso al servidor
